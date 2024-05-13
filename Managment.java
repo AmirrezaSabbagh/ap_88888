@@ -65,12 +65,58 @@ public class Managment {
         } catch (Exception e) {}
         return i;
     }
+    private static void remove(int x){
+        ArrayList<Note> arrayList=Managment.readFromFile();
+        try {
+            exception(x,arrayList.size());
+        }
+        catch(ArrayIndexOutOfBoundsException e){
+            e.getMessage();
+        }
+        arrayList.remove(x);
+        Managment.writeToFile(arrayList);
+
+    }
+    private static void Export(int x) {
+        ArrayList<Note> arrayList = Managment.readFromFile();
+        String fileName = arrayList.get(x).getTitle();
+        FileWriter writer = null;
+        try {
+            exception(x, arrayList.size());
+            fileName = arrayList.get(x).getTitle();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Invalid index selected.");
+            return;
+        }
+        try {
+            writer = new FileWriter(fileName); // Create a new FileWriter object
+            writer.write(String.join("\n", arrayList.get(x).getBody())); // Write the text to the file
+        } catch (IOException e) {
+            System.err.println("An error occurred while writing to the file.");
+            e.printStackTrace();
+        } finally {
+            if (writer != null) {
+                try {
+                    writer.close(); // Close the writer
+                } catch (IOException e) {
+                    System.err.println("Error closing the FileWriter.");
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    public static void exception(int x ,int size)throws ArrayIndexOutOfBoundsException{
+        if (x + 1 >size) {
+            throw new IndexOutOfBoundsException("you can choose a number beetween 1 to"+ size);
+        }
+    }
     public static int menu(){
         while(true){
             System.out.println("1-add");
             System.out.println("2-remove");
             System.out.println("3-notes");
             System.out.println("4-export");
+            System.out.println("5-exit");
             Scanner input = new Scanner(System.in);
             int result = input.nextInt();
             input.nextLine();
@@ -88,7 +134,10 @@ public class Managment {
                 }
             }
             else if(result == 2){
-
+                System.out.println("choose one of the notes to remove or enter 0 to back to menu");
+                Show();
+                int index = input.nextInt();
+                remove(index -1);
             }
             else if(result == 3){
                 if(Show()!=1){
@@ -100,7 +149,13 @@ public class Managment {
                 }
             }
             else if(result == 4){
-
+                System.out.println("choose a note to export");
+                Show();
+                int index = input.nextInt();
+                Export(index -1);
+            }
+            else if(result == 5){
+                break;
             }
         }
     }
