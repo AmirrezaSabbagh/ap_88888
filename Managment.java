@@ -110,7 +110,7 @@ public class Managment {
             throw new IndexOutOfBoundsException("you can choose a number beetween 1 to"+ size);
         }
     }
-    public static int menu(){
+    public static void menu(){
         while(true){
             System.out.println("1-add");
             System.out.println("2-remove");
